@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Contrato{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-danger">¿Estás seguro de que quieres eliminar este Contrato?</h2>
+    <p><strong>Salario:</strong> {{ contrato.salario }}</p>
+    <p><strong>Tipo de Contrato:</strong> {{ contrato.tipo_contrato }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Especialidades{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Lista de Especialidades</h2>
+    <a href="{% url 'crear_especialidad' %}" class="btn btn-success mb-3">Añadir Especialidad</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for especialidad in listar_especialidades %}
+            <tr>
+                <td>{{ especialidad.nombre_especialidad }}</td>
+                <td>{{ especialidad.descripcion_especialidad }}</td>
+                <td>
+                    <a href="{% url 'actualizar_especialidad' especialidad.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_especialidad' especialidad.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

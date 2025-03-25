@@ -1,0 +1,30 @@
+<!-- templates/persona/listar_personas_inactivas.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Personas Inactivas</h2>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for persona in personas_inactivas %}
+            <tr>
+                <td>{{ persona.nombre }}</td>
+                <td>{{ persona.apellido }}</td>
+                <td>
+                    <a href="{% url 'reactivar_persona' persona.id %}" class="btn btn-warning btn-sm">Reactivar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <li>No hay personas inactivas.</li>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

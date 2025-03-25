@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar EPS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-danger">¿Estás seguro de que quieres eliminar esta EPS?</h2>
+    <p><strong>Nombre:</strong> {{ eps.nombre_eps }}</p>
+    <p><strong>Dirección:</strong> {{ eps.direccion_eps }}</p>
+    <p><strong>Teléfono:</strong> {{ eps.telefono_eps }}</p>
+    <p><strong>Email:</strong> {{ eps.email_eps }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_eps' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

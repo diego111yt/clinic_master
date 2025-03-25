@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Persona{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>¿Estás seguro de que quieres eliminar a {{ persona.nombre }}?</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_personas' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

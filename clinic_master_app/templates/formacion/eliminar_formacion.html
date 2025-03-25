@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Formación{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-danger">¿Estás seguro de que quieres eliminar esta Formación?</h2>
+    <p><strong>Tipo:</strong> {{ formacion.tipo_formacion }}</p>
+    <p><strong>Institución:</strong> {{ formacion.intitucion }}</p>
+    <p><strong>Fecha Inicio:</strong> {{ formacion.fecha_inicio }}</p>
+    <p><strong>Fecha Fin:</strong> {{ formacion.fecha_fin }}</p>
+    <p><strong>Título:</strong> {{ formacion.titulo_obtenido }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_formaciones' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

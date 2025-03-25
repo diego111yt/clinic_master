@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Empleado{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-danger">¿Estás seguro de que quieres eliminar a este Empleado?</h2>
+    <p><strong>Nombre:</strong> {{ empleado.id_persona.nombre }} {{ empleado.id_persona.apellido }}</p>
+    <p><strong>Área de Trabajo:</strong> {{ empleado.area_trabajo }}</p>
+    <p><strong>Puesto:</strong> {{ empleado.puesto_empresa }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_empleados' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

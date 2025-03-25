@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de EPS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Lista de EPS</h2>
+    <a href="{% url 'crear_eps' %}" class="btn btn-success mb-3">Añadir EPS</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eps in listar_eps %}
+            <tr>
+                <td>{{ eps.nombre_eps }}</td>
+                <td>{{ eps.direccion_eps }}</td>
+                <td>{{ eps.telefono_eps }}</td>
+                <td>{{ eps.email_eps }}</td>
+                <td>
+                    <a href="{% url 'actualizar_eps' eps.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{% url 'eliminar_eps' eps.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

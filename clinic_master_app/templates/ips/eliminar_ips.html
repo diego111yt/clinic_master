@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar IPS{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-danger">¿Estás seguro de que quieres eliminar esta IPS?</h2>
+    <p><strong>Nombre:</strong> {{ ips.nombre_ips }}</p>
+    <p><strong>Dirección:</strong> {{ ips.direccion_ips }}</p>
+    <p><strong>Teléfono:</strong> {{ ips.telefono_ips }}</p>
+    <p><strong>Email:</strong> {{ ips.email_ips }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_ips' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

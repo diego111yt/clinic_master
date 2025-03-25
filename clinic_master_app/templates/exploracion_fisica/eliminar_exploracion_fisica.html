@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Exploración Física{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-danger">¿Estás seguro de que quieres eliminar esta Exploración Física?</h2>
+    <p><strong>Frecuencia Cardíaca:</strong> {{ exploracion.frecuencia_cardiaca }}</p>
+    <p><strong>Temperatura:</strong> {{ exploracion.temperatura }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'listar_exploraciones_fisicas' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
