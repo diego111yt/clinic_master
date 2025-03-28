@@ -42,12 +42,6 @@ urlpatterns = [
     path('actualizar_eps/<int:eps_id>/', views.actualizar_eps, name='actualizar_eps'),
     path('eliminar_eps/<int:eps_id>/', views.eliminar_eps, name='eliminar_eps'),
 
-    # region  Rutas para Ips
-    path('crear_ips/', views.crear_ips, name='crear_ips'),
-    path('listar_ips/', views.listar_ips, name='listar_ips'),
-    path('actualizar_ips/<int:ips_id>/', views.actualizar_ips, name='actualizar_ips'),
-    path('eliminar_ips/<int:ips_id>/', views.eliminar_ips, name='eliminar_ips'),
-
     # region Rutas para Persona
     path('crear_persona/', views.crear_persona, name='crear_persona'),
     path('listar_personas/', views.listar_personas, name='listar_personas'),
@@ -58,15 +52,9 @@ urlpatterns = [
 
     # region Rutas para Contrato
     path('crear_contrato/', views.crear_contrato, name='crear_contrato'),
-    path('listar_contrato/', views.listar_contratos, name='listar_contrato'),
+    path('listar_contrato/', views.listar_contratos, name='listar_contratos'),
     path('actualizar_contrato/<int:contrato_id>/', views.actualizar_contrato, name='actualizar_contrato'),
     path('eliminar_contrato/<int:contrato_id>/', views.eliminar_contrato, name='eliminar_contrato'),
-
-    # region Rutas para Especialidad
-    path('crear_especialidad/', views.crear_especialidad, name='crear_especialidad'),
-    path('listar_especialidad/', views.listar_especialidades, name='listar_especialidad'),
-    path('actualizar_especialidad/<int:especialidad_id>/', views.actualizar_especialidad, name='actualizar_especialidad'),
-    path('eliminar_especialidad/<int:especialidad_id>/', views.eliminar_especialidad, name='eliminar_especialidad'),
 
     # region Rutas para Formacion
     path('crear_formacion/', views.crear_formacion, name='crear_formacion'),

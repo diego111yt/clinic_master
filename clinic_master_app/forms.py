@@ -2,6 +2,26 @@ from django import forms
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
+from django_select2.forms import Select2MultipleWidget
+
+CARGOS = [
+    ("medico_general", "Médico General"),
+    ("medico_especialista", "Médico Especialista"),
+    ("enfermero_jefe", "Enfermero(a) Jefe"),
+    ("auxiliar_enfermeria", "Auxiliar de Enfermería"),
+    ("terapista", "Terapista (Físico, Ocupacional, Respiratorio, etc.)"),
+    ("bacteriologo", "Bacteriólogo(a)"),
+    ("director_medico", "Gerente o Director Médico"),
+    ("coordinador_salud", "Coordinador de Servicios de Salud"),
+    ("recepcionista", "Recepcionista / Auxiliar Administrativo"),
+    ("facturador", "Facturador o Auxiliar de Cuentas Médicas"),
+    ("trabajador_social", "Trabajador Social"),
+    ("regente_farmacia", "Regente de Farmacia"),
+    ("tecnico_radiologia", "Técnico en Radiología"),
+    ("aseo_mantenimiento", "Personal de Aseo y Mantenimiento"),
+]
+
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Usuario", max_length=100)
@@ -22,11 +42,6 @@ class EpsForm(forms.ModelForm):
         model = Eps
         fields = '__all__'
 
-class IpsForm(forms.ModelForm):
-    class Meta:
-        model = Ips
-        fields = '__all__'
-
 class PersonaForm(forms.ModelForm):
     class Meta:
         model = Persona
@@ -40,10 +55,6 @@ class ContratoForm(forms.ModelForm):
         model = Contrato
         fields = '__all__'
 
-class EspecialidadForm(forms.ModelForm):
-    class Meta:
-        model = Especialidad
-        fields = '__all__'
 
 class FormacionForm(forms.ModelForm):
     class Meta:

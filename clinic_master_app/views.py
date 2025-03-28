@@ -4,6 +4,7 @@ from django.urls import reverse
 from .models import *
 from .forms import *
 from django.contrib.auth import login
+from django.http import JsonResponse
 
 #region Inicio
 
@@ -129,45 +130,6 @@ def actualizar_persona(request, persona_id):
         form = PersonaForm(instance=persona)
 
     return render(request, 'persona/actualizar_persona.html', {'form': form})
-    
-# region ips
-
-# crear ips
-def crear_ips(request):
-    if request.method =='POST':
-        form = IpsForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_ips')
-    else:
-        form = IpsForm()
-    return render(request, 'ips/crear_ips.html', {'form':form})
-
-# listar ips
-def listar_ips(request):
-    ips = Ips.objects.all()
-    return render(request, 'ips/listar_ips.html',{'listar_ips':ips})
-
-# actualizar ips
-def actualizar_ips(request, ips_id):
-    ips = get_object_or_404(Ips, id=ips_id)
-
-    if request.method == 'POST':
-        form = IpsForm(request.POST, instance=ips)
-        if form.is_valid():
-            form.save()
-            return redirect('lista_ips')  # Redirige a la lista de IPS después de actualizar
-    else:
-        form = IpsForm(instance=ips)
-
-    return render(request, 'actualizar_ips.html', {'form': form})
-
-# eliminar ips
-def eliminar_ips(request, ips_id):
-    ips = get_object_or_404(Ips, id=ips_id)
-    ips.delete()
-    return redirect('listar_ips')
-
 
 #region eps
 
@@ -195,7 +157,7 @@ def actualizar_eps(request, eps_id):
         form = EpsForm(request.POST, instance=eps)
         if form.is_valid():
             form.save()
-            return redirect('lista_eps')  # Redirige a la lista de EPS después de actualizar
+            return redirect('listar_eps')  # Redirige a la lista de EPS después de actualizar
     else:
         form = EpsForm(instance=eps)
 
@@ -249,52 +211,7 @@ def eliminar_contrato(request, contrato_id):
     contrato.delete()
     return redirect('listar_contratos')
 
-
-# region Especialidad
-
-# crear
-def crear_especialidad(request):
-    if request.method == 'POST':
-        form = EspecialidadForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_especialidades')  # Redirige a la lista de especialidades después de crear
-    else:
-        form = EspecialidadForm()
-
-    return render(request, 'especialidad/crear_especialidad.html', {'form': form})
-
-
-
-# listar
-def listar_especialidades(request):
-    especialidades = Especialidad.objects.all()  # Obtenemos todos los registros de Especialidades
-    return render(request, 'especialidad/listar_especialidades.html', {'listar_especialidades': especialidades})
-
-# actualizar
-def actualizar_especialidad(request, especialidad_id):
-    especialidad = get_object_or_404(Especialidad, id=especialidad_id)
-
-    if request.method == 'POST':
-        form = EspecialidadForm(request.POST, instance=especialidad)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_especialidades')  # Redirige a la lista de especialidades después de actualizar
-    else:
-        form = EspecialidadForm(instance=especialidad)
-
-    return render(request, 'especialidad/actualizar_especialidad.html', {'form': form})
-
-# eliminar especialidad
-def eliminar_especialidad(request, especialidad_id):
-    especialidad = get_object_or_404(Especialidad, id=especialidad_id)
-    especialidad.delete()
-    return redirect('listar_especialidades')
-
-
-
 # region Formacion
-
 
 # crear
 def crear_formacion(request):
@@ -685,9 +602,6 @@ def eliminar_medicamento(request, medicamento_id):
     medicamento = get_object_or_404(Medicamento, id=medicamento_id)
     medicamento.delete()
     return redirect('listar_medicamentos')
-
-
-
 
 # region Formula
 # crear formula
