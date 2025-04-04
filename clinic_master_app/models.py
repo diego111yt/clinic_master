@@ -81,11 +81,29 @@ PUESTOS_CONTRATO = [
     ("Técnico en sistemas", "Contrato por prestación de servicios")
 ]
 
+TIPO_DE_CITA = [
+    ("textual_corta", "Cita textual corta"),
+    ("textual_larga", "Cita textual larga"),
+    ("parafraseada", "Cita parafraseada"),
+    ("medica_general", "Cita médica general"),
+    ("medica_especializada", "Cita médica especializada"),
+    ("examenes_medicos", "Cita de exámenes médicos"),
+    ("seguimiento_medico", "Cita de seguimiento médico"),
+    ("a_ciegas", "Cita a ciegas"),
+    ("casual", "Cita casual"),
+    ("formal", "Cita formal"),
+    ("entrevista_trabajo", "Entrevista de trabajo"),
+    ("reunion_negocios", "Reunión de negocios"),
+    ("clientes_proveedores", "Cita con clientes o proveedores")
+]
+
 
 def user_directory_path(instance, filename):
     return f"persona/img/{instance.id}_{filename}"
+
+
 def user_directory_path_1(instance, filename):
-    return f"persona/file/{instance.id}_{filename}"
+    return f"/persona/file/{instance.id}_{filename}"
 
 
 
@@ -124,7 +142,7 @@ class Persona(models.Model):
     email = models.EmailField()
     eps = models.ForeignKey(Eps, on_delete=models.CASCADE, null=True)
     is_active = models.BooleanField(default=True)
-    imagen = models.ImageField(upload_to=user_directory_path, blank=True, null=True, verbose_name='imagen')
+    imagen = models.ImageField(upload_to=user_directory_path, blank=True, null=True, verbose_name='Imagen')
     def __str__(self):
         return f'{self.num_doc} - {self.nombre}'
     
@@ -197,8 +215,8 @@ class Cita(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True,blank=True)
     hora = models.TimeField()
     fecha = models.DateField()
-    tipo = models.CharField(max_length=100)
-    is_active = models.BooleanField(default=True)
+    tipo = models.CharField(max_length=100, choices=TIPO_DE_CITA)
+    is_active = models.BooleanField(default=False)
     id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
 
     def __str__(self):

@@ -21,13 +21,25 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
 <script>
+    function getMaxDate() {
+        var date = new Date();
+        date.setMonth(date.getMonth() + 2); // Aumenta 2 meses a la fecha actual
+        return date;
+    }
+
     flatpickr(".flatpickr", {
         dateFormat: "Y-m-d",  // Formato de la fecha (AAAA-MM-DD)
         altInput: true,       // Muestra el valor en un formato más amigable
         altFormat: "F j, Y",  // Formato alternativo (Ej: 20 de Marzo de 2025)
         locale: "es",         // Cambia el idioma al español
         minDate: "today",     // Restringe fechas anteriores a hoy
-        maxDate: new Date().fp_incr(5 * 365) // Máximo: 5 años desde hoy
+        maxDate: getMaxDate(), // Establecer la fecha máxima como 2 meses a partir de hoy
+        disable: [
+            function(date) {
+                // getDay() retorna 0 para domingo
+                return date.getDay() === 0;
+            }
+        ]
     });
 </script>
 

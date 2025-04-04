@@ -72,7 +72,7 @@ def listar_citas_activas(request):
 # crear_usuario
 def crear_usuario(request):
     if request.method == 'POST':
-        form = UsuarioForm(request.POST)
+        form = UsuarioForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('listar_usuarios')
@@ -135,7 +135,7 @@ def login_view(request):
 
     return render(request, "auth/login.html")
 
-# crear persona
+#region crear persona
 def crear_persona(request):
     if request.method =='POST':
         form = PersonaForm(request.POST)
@@ -149,7 +149,7 @@ def crear_persona(request):
 # listar persona
 def listar_personas(request):
     persona = Persona.objects.filter(is_active=True)
-    return render(request, 'persona/listar_personas.html', {'persona_list':persona})
+    return render(request, 'persona/listar_personas.html', {'persona':persona})
 
 # reactivar usuarios
 def reactivar_persona(request, id):
@@ -163,7 +163,7 @@ def desactivar_persona(request, persona_id):
     persona = get_object_or_404(Persona, id=persona_id)
     persona.is_active = False
     persona.save()
-    return redirect('listar_personas_inactivas')
+    return redirect('listar_personas')
 
 # listar personas inactivas
 def listar_personas_inactivas(request):

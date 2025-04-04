@@ -20,13 +20,17 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 <!-- Activación de Flatpickr -->
 <script>
+    // Función para calcular la fecha mínima permitida (18 años atrás)
+    function getMinDate() {
+        var date = new Date();
+        date.setFullYear(date.getFullYear() - 18); // Resta 18 años a la fecha actual
+        return date;
+    }
+
+    // Inicializar Flatpickr
     flatpickr(".flatpickr", {
-        dateFormat: "Y-m-d",  // Formato de la fecha (AAAA-MM-DD)
-        altInput: true,       // Muestra el valor en un formato más amigable
-        altFormat: "F j, Y",  // Formato alternativo (Ej: March 20, 2025)
-        locale: "es",          // Cambia el idioma al español
-        maxDate: new Date(),    // Máximo: hoy (año actual)
-        minDate: "1920-01-01"   // Mínimo: 1 de enero de 1900
+        maxDate: getMinDate(), // Establecer la fecha máxima como la fecha mínima permitida
+        dateFormat: "Y-m-d", // Formato de fecha
     });
 </script>
 

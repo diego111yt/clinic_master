@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for persona in persona_list %}
+            {% for persona in persona %}
             <tr>
                 <td>{{ persona.nombre }}</td>
                 <td>{{ persona.apellido }}</td>
@@ -27,14 +27,14 @@
                 <td>{{ persona.email }}</td>
                 <td>                    
                     {% if persona.imagen %}
-                    <img src="{{ persona.imagen.url }}" alt="Imagen de {{ persona.nombres }}" width="100">
+                    <img src="{{ request.persona.imagen.url }}" alt="Imagen de {{ request.persona.nombre }}" width="100">
                     {% else %}
                     <img src="{% static 'img/usuarios_pre.png' %}" alt="Imagen predeterminada" width="100">
                     {% endif %}
                 </td>     
                 <td>
                     <a href="{% url 'actualizar_persona' persona.id %}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="{% url 'desactivar_persona' persona.id %}" class="btn btn-danger btn-sm">Desactivar</a>
+                    <a href="{% url 'desactivar_persona' persona.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Realmente desea eliminar esta persona?')">Desactivar</a>
                 </td>
             </tr>
             {% endfor %}

@@ -23,7 +23,7 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     
-    
+    path("", views.login_view, name="login"),
     path('activar_cita/<int:cita_id>/', views.activar_cita, name='activar_cita'),
     path('citas-inactivas/', views.seleccionar_cita, name='seleccionar_cita'),
     # region listar_citas_activas
@@ -36,7 +36,6 @@ urlpatterns = [
     path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),
     
     # region lagin
-    path("login/", views.login_view, name="login"),
 
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
     
@@ -143,7 +142,7 @@ urlpatterns = [
     path('listar_historia_clinica/', views.listar_historias_clinicas, name='listar_historia_clinica'),
     path('actualizar_historia_clinica/<int:historia_clinica_id>/', views.actualizar_historia_clinica, name='actualizar_historia_clinica'),
     path('eliminar_historia_clinica/<int:historia_clinica_id>/', views.eliminar_historia_clinica, name='eliminar_historia_clinica'),
-]
+] 
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

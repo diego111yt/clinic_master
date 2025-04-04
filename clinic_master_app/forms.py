@@ -55,7 +55,6 @@ class PersonaForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'fecha_nac': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'flatpickr'}),
-            
         }
 
 # region contrato form
