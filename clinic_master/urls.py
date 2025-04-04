@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from clinic_master_app import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,18 +23,28 @@ from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     
+    
+    path('activar_cita/<int:cita_id>/', views.activar_cita, name='activar_cita'),
+    path('citas-inactivas/', views.seleccionar_cita, name='seleccionar_cita'),
+    # region listar_citas_activas
+    path('citas-activas/', views.listar_citas_activas, name='listar_citas_activas'),
+    
     # region usuario
     path('crear_usuario/', views.crear_usuario, name='crear_usuario'),
     path('listar_usuarios/', views.listar_usuarios, name='listar_usuarios'),
-    path('actualizar_usuario/<int:eps_id>/', views.actualizar_usuario, name='actualizar_usuario'),
-    path('eliminar_usuario/<int:eps_id>/', views.eliminar_usuario, name='eliminar_usuario'),
+    path('actualizar_usuario/<int:usuario_id>/', views.actualizar_usuario, name='actualizar_usuario'),
+    path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),
     
     # region lagin
-    path("", views.login_view, name="login"),
+    path("login/", views.login_view, name="login"),
+
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
     
     # home
     path("home/", views.home, name="home"),
+    path("medico/", views.medico, name="medico"),
+    path("auxiliar/", views.auxiliar, name="auxiliar"),
+    path("persona/", views.persona, name="persona"),
     
     # region Rutas para Eps
     path('crear_eps/', views.crear_eps, name='crear_eps'),
@@ -112,7 +122,7 @@ urlpatterns = [
 
     # region Rutas para Consulta
     path('crear_consulta/', views.crear_consulta, name='crear_consulta'),
-    path('listar_consulta/', views.listar_consultas, name='listar_consulta'),
+    path('listar_consulta/', views.listar_consultas, name='listar_consultas'),
     path('actualizar_consulta/<int:consulta_id>/', views.actualizar_consulta, name='actualizar_consulta'),
     path('eliminar_consulta/<int:consulta_id>/', views.eliminar_consulta, name='eliminar_consulta'),
 

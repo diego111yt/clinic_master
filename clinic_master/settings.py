@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'clinic_master_app'
+    'clinic_master_app',
+    'django_select2'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'clinic_master.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'clinic_master',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': '1',
         'HOST': 'localhost',
         'PORT': '3306'
     }
@@ -132,3 +132,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+AUTH_USER_MODEL = 'clinic_master_app.Usuario'
+
+LOGIN_REDIRECT_URL = "/redirect/" 
+
+USE_TZ = True
+
+TIME_ZONE = 'America/Bogota'
+LOGIN_URL = '/login/'

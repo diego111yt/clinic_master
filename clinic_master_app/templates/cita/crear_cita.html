@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'auxiliar.html' %}
 
 {% block title %}Crear Cita{% endblock %}
 
@@ -7,9 +7,39 @@
     <h2>Crear Cita</h2>
     <form method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.as_p }}  <!-- Renderiza todos los campos del formulario como párrafos -->
+
         <button type="submit" class="btn btn-primary">Guardar</button>
         <a href="{% url 'listar_citas' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+
+<!-- Incluir los estilos y scripts de Flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- Cargar el archivo de idioma en español -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+<script>
+    flatpickr(".flatpickr", {
+        dateFormat: "Y-m-d",  // Formato de la fecha (AAAA-MM-DD)
+        altInput: true,       // Muestra el valor en un formato más amigable
+        altFormat: "F j, Y",  // Formato alternativo (Ej: 20 de Marzo de 2025)
+        locale: "es",         // Cambia el idioma al español
+        minDate: "today",     // Restringe fechas anteriores a hoy
+        maxDate: new Date().fp_incr(5 * 365) // Máximo: 5 años desde hoy
+    });
+</script>
+
+<script>
+    flatpickr(".flatpickr-time", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",  // Formato de 24 horas (HH:MM)
+        time_24hr: true,     // Asegura que use formato 24 horas
+        locale: "es",
+    });
+</script>
+
+
 {% endblock %}

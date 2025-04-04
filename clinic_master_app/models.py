@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 import os
 import ast
 
@@ -19,6 +20,7 @@ NIVELES_IPS = [
     (2, "Nivel 2 - Intermedio"),
     (3, "Nivel 3 - Avanzado"),
 ]
+# region list especialidades
 
 ESPECIALIDADES = [
     ('Ninguno', 'ninguno'),
@@ -38,6 +40,7 @@ ESPECIALIDADES = [
     ('Radiología', 'Diagnóstico por imágenes'),
     ('Anestesiología', 'Anestesia en procedimientos quirúrgicos'),
 ]
+# region list puestos
 
 PUESTOS = [
     ("Puesto clínico", "Médico general"),
@@ -48,8 +51,10 @@ PUESTOS = [
     ("Puesto administrativo", "Gerente administrativo"),
     ("Puesto administrativo", "Recepcionista"),
     ("Puesto administrativo", "Contador(a)"),
-    ("Otros puestos", "Técnico en sistemas")
+    ("Otros puestos", "Técnico en sistemas"),
+    ("it", "IT")
 ]
+# region list_puestos de area de trabajo
 
 
 PUESTOS_AREA_TRABAJO = [
@@ -63,7 +68,7 @@ PUESTOS_AREA_TRABAJO = [
     ("Contador(a)", "Departamento de contabilidad y finanzas"),
     ("Técnico en sistemas", "Departamento de tecnología y soporte")
 ]
-
+# region list_puestos_contrato
 PUESTOS_CONTRATO = [
     ("Médico general", "Contrato a término indefinido"),
     ("Enfermero(a)", "Contrato a término indefinido"),
@@ -83,27 +88,7 @@ def user_directory_path_1(instance, filename):
     return f"persona/file/{instance.id}_{filename}"
 
 
-# region Usuario
-class Usuario(AbstractUser):  
-    empleado = models.ForeignKey("clinic_master_app.Empleado", on_delete=models.CASCADE, null=True, blank=True)
 
-    groups = models.ManyToManyField(
-        "auth.Group",
-        related_name="usuarios",
-        blank=True,
-        help_text="The groups this user belongs to."
-    )
-    
-    user_permissions = models.ManyToManyField(
-        "auth.Permission",
-        related_name="usuarios_permisos",
-        blank=True,
-        help_text="Specific permissions for this user."
-    )
-
-    def __str__(self):
-        return self.username
-    
 #region EPS    
 class Eps(models.Model):
     nombre_eps  = models.CharField(max_length=100)
@@ -125,7 +110,11 @@ class Cargo(models.Model):
 #region Persona
 class Persona(models.Model):
     tipo_doc = models.CharField(max_length=10, choices=TIPO_DOC)
-    num_doc = models.CharField(max_length=10, unique=True, null=True)
+    num_doc = models.CharField(max_length=10, unique=True, null=False)
+    def clean(self):
+        # Asegura que el valor de num_doc solo contenga dígitos
+        if self.num_doc and not self.num_doc.isdigit():
+            raise ValidationError('El número de documento solo puede contener dígitos numericos.')
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     fecha_nac = models.DateField()
@@ -156,6 +145,27 @@ class Empleado(models.Model):
     def __str__(self):
         return f'{self.id_persona}'
     
+    
+#region Usuario
+
+class Usuario(AbstractUser):
+    persona = models.OneToOneField('Persona', on_delete=models.SET_NULL, null=True, blank=True)  # <- esta línea nueva
+
+    puesto_empresa = models.CharField(
+        max_length=50,
+        choices=[
+            ("it", "IT"),
+            ("medico", "Médico"),
+            ("admin", "Administrador"),
+            ("persona", "persona"),
+            ("auxiliar", "Auxiliar"),
+        ],
+        default="it"
+    )
+
+    def __str__(self):
+        return self.username
+    
 #region Formacion
 class Formacion(models.Model):
     tipo_formacion = models.CharField(max_length=100)
@@ -178,17 +188,21 @@ class Contrato(models.Model):
     def archivo_nombre(self):
         return os.path.basename(self.documento_contrato.name).replace("None_", "")
     
+    
 
 
 
 #region Cita
-class Cita (models.Model):
+class Cita(models.Model):
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True,blank=True)
     hora = models.TimeField()
     fecha = models.DateField()
     tipo = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
     id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
 
-
+    def __str__(self):
+        return f'Cita de {self.persona.nombre} el {self.fecha} a las {self.hora}'
 #region Procedimiento
 class Procedimiento(models.Model):
     nombre_procedimiento = models.CharField(max_length=50)

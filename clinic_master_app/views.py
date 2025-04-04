@@ -1,16 +1,72 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
 from .models import *
 from .forms import *
 from django.contrib.auth import login
 from django.http import JsonResponse
-
+from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now, timedelta, datetime, localtime
 #region Inicio
 
 def home(request):
     return render(request, 'home.html') 
+def medico(request):
+    return render(request, 'medico.html') 
+def auxiliar(request):
+    return render(request, 'auxiliar.html') 
+def persona(request):
+    return render(request, 'persona.html') 
 
+@login_required
+def activar_cita(request, cita_id):
+    cita = get_object_or_404(Cita, id=cita_id)
+    # asigna la cita como arriba
+
+    if request.user.persona:
+        cita.is_active = True
+        cita.persona = request.user.persona  # 👈 asigna la persona que está logueada
+        cita.save()
+
+    return redirect('seleccionar_cita')  # o donde quieras redirigir
+
+# region listar_citas_inactivas
+def seleccionar_cita(request):
+    ahora = localtime(now()).replace(tzinfo=None)  # 🕒 Hora local sin tzinfo
+
+    citas = Cita.objects.filter(is_active=False)
+    citas_futuras = []
+
+    for cita in citas:
+        if cita.fecha and cita.hora:
+            cita_datetime = datetime.combine(cita.fecha, cita.hora)
+
+            print(f"FECHA: {cita.fecha}, HORA: {cita.hora}, COMBINADO: {cita_datetime}, AHORA: {ahora}")  # debug
+
+            if cita_datetime > ahora:
+                citas_futuras.append(cita)
+
+    return render(request, 'cita/listar_citas_inactivas.html', {'citas': citas_futuras})
+
+# region listar_citas_activas
+def listar_citas_activas(request):
+    ahora = localtime(now()).replace(tzinfo=None)  # 🕒 Hora local sin timezone
+    limite = ahora - timedelta(minutes=20)
+
+    citas = Cita.objects.filter(is_active=True)
+    citas_visibles = []
+
+    for cita in citas:
+        if cita.fecha and cita.hora:
+            cita_datetime = datetime.combine(cita.fecha, cita.hora)
+
+            print(f"FECHA: {cita.fecha}, HORA: {cita.hora}, COMBINADO: {cita_datetime}, LIMITE: {limite}")  # debug
+
+            if cita_datetime >= limite:
+                citas_visibles.append(cita)
+
+    return render(request, 'cita/listar_citas_activas.html', {'citas': citas_visibles})
 # region usuario
 
 # crear_usuario
@@ -40,46 +96,44 @@ def eliminar_usuario(request, usuario_id):
 
 # actualizar usuario
 def actualizar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)  # Obtiene el usuario por su ID
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+
     if request.method == 'POST':
-        form = UsuarioForm(request.POST, instance=usuario)  # Pasa el usuario a la instancia del formulario
+        form = UsuarioUpdateForm(request.POST, instance=usuario)
         if form.is_valid():
-            form.save()  # Guarda el formulario con los datos actualizados
-            return redirect('listar_usuarios')  # Redirige a la lista de usuarios después de actualizar
+            form.save()
+            return redirect('listar_usuarios')  # O donde necesites
     else:
-        form = UsuarioForm(instance=usuario)  # Carga el formulario con los datos del usuario
+        form = UsuarioUpdateForm(instance=usuario)
 
     return render(request, 'usuario/actualizar_usuario.html', {'form': form})
 
 # region login
 def login_view(request):
     if request.method == "POST":
-        form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
             login(request, user)
 
-            # 🔥 Verificamos si el usuario es "diego"
-            if user.username == "diego":
-                return redirect("home")  # Redirigir a home.html
-
-            # Si es otro usuario, manejar redirecciones según su puesto
-            if user.puesto_empresa:
-                if user.puesto_empresa.puesto_empresa == "Doctor":
-                    return redirect("base")
-                elif user.puesto_empresa.puesto_empresa == "Administrador":
-                    return redirect("base")
-                else:
-                    return redirect("dashboard_general")  # Otra página si no es doctor/admin
+            # Redirección según puesto_empresa
+            if user.puesto_empresa == "it":
+                return redirect("home")
+            elif user.puesto_empresa == "medico":
+                return redirect("medico")
+            elif user.puesto_empresa == "persona":
+                return redirect("persona")
+            elif user.puesto_empresa == "auxiliar":
+                return redirect("auxiliar")
             else:
-                return redirect("dashboard_general")  # Si no tiene puesto asignado
+                return redirect("home")  # Redirección por defecto
 
-    else:
-        form = LoginForm()
+        else:
+            return render(request, "auth/login.html", {"error": "Credenciales inválidas"})
 
-    return render(request, "auth/login.html", {"form": form})
-
-#region Persona
+    return render(request, "auth/login.html")
 
 # crear persona
 def crear_persona(request):
@@ -280,6 +334,10 @@ def eliminar_empleado(request, empleado_id):
     empleado = get_object_or_404(Empleado, id=empleado_id)
     empleado.delete()
     return redirect('listar_empleados')
+
+
+
+# region Usuario
 
 
 # region Citas
