@@ -27,7 +27,7 @@
                 <td>{{ persona.email }}</td>
                 <td>                    
                     {% if persona.imagen %}
-                    <img src="{{ request.persona.imagen.url }}" alt="Imagen de {{ request.persona.nombre }}" width="100">
+                    <img src="{{ usuario.persona.imagen.url }}" alt="Imagen de {{ usuario.persona.nombre }}" width="100">
                     {% else %}
                     <img src="{% static 'img/usuarios_pre.png' %}" alt="Imagen predeterminada" width="100">
                     {% endif %}

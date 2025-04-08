@@ -56,6 +56,22 @@ class PersonaForm(forms.ModelForm):
         widgets = {
             'fecha_nac': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'flatpickr'}),
         }
+class ImagenUserForm(forms.ModelForm):
+    class Meta:
+        model = Persona
+        fields = ['imagen']
+        widgets = {
+            'imagen':forms.FileInput
+        }
+    def validad_iamgen(self):
+        imagen = self.cleaned_data.get(imagen)
+        if imagen :
+            extension = os.path.splitext(imagen.name)[1].lower()
+            if extension not in ['jpg', 'png', 'jpeg']:
+                raise ValidationError('no se vale')
+            if imagen.size > 102400:
+                raise ValidationError('el tamaño')
+        return imagen          
 
 # region contrato form
 class ContratoForm(forms.ModelForm):
