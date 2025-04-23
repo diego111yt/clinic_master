@@ -86,13 +86,10 @@ def listar_usuarios(request):
     usuarios = Usuario.objects.all()  # Obtiene todos los usuarios
     return render(request, 'usuario/listar_usuarios.html', {'usuarios': usuarios})
 
-# eliminar usuario
 def eliminar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)  # Obtiene el usuario por su ID
-    if request.method == 'POST':
-        usuario.delete()  # Elimina el usuario de la base de datos
-        return redirect('listar_usuarios')  # Redirige a la lista de usuarios después de eliminarlo
-    return render(request, 'usuario/eliminar_usuario.html', {'usuario': usuario})
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    usuario.delete()
+    return redirect('listar_usuarios')
 
 # actualizar usuario
 def actualizar_usuario(request, usuario_id):
